@@ -27,7 +27,7 @@ def get_spn(lowerCorner, upperCorner):
     return f'{dx},{dy}'
 
 
-def get_response_map(ll, spn, result, *pt):
+def get_response_map(ll, spn, *pt):
     """pt = (style, coord)"""
     server_address = "https://static-maps.yandex.ru/v1"
     apikey = '0eea7a3e-806e-4b45-8976-3c543752e89c'

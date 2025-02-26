@@ -35,5 +35,5 @@ if __name__ == '__main__':
 
     map_file = "map.png"
     with open(map_file, "wb") as file:
-        file.write(get_response_map(ll, spn, (ll_toponym, 'vkbkm'), *points))
+        file.write(get_response_map(ll, spn, (ll_toponym, 'pm2al'), *points))
     draw_map(map_file)
