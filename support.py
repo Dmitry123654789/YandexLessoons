@@ -27,7 +27,7 @@ def get_spn(lowerCorner, upperCorner):
     return f'{dx},{dy}'
 
 
-def get_response_map(ll, spn, *pt):
+def get_response_map(ll, spn, result, *pt):
     """pt = (style, coord)"""
     server_address = "https://static-maps.yandex.ru/v1"
     apikey = '0eea7a3e-806e-4b45-8976-3c543752e89c'
@@ -35,7 +35,7 @@ def get_response_map(ll, spn, *pt):
         'll': ll,
         'spn': spn,
         'apikey': apikey,
-        'pt': '~'.join([','.join(x) for x in pt]),
+        'pt': '~'.join([','.join(x) for x in pt])
     }
     response = requests.get(server_address, params=map_params)
     if not response:
@@ -44,7 +44,7 @@ def get_response_map(ll, spn, *pt):
     return response.content
 
 
-def get_response_organization(ll, spn, organization):
+def get_response_organization(ll, spn, result, organization):
     search_api_server = "https://search-maps.yandex.ru/v1/"
     api_key = "dda3ddba-c9ea-4ead-9010-f43fbc15c6e3"
     search_params = {
@@ -53,7 +53,8 @@ def get_response_organization(ll, spn, organization):
         "lang": "ru_RU",
         "ll": ll,
         "spn": spn,
-        "type": "biz"
+        "type": "biz",
+        'results': result,
     }
     response = requests.get(search_api_server, params=search_params)
     if not response:

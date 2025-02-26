@@ -2,27 +2,38 @@ from support import *
 
 if __name__ == '__main__':
     toponym_to_find = " ".join(sys.argv[1:])
+    result = 10
     toponym = get_response(toponym_to_find)
     spn_toponym = get_spn(toponym['boundedBy']['Envelope']['lowerCorner'],
                           toponym['boundedBy']['Envelope']['upperCorner'])
     ll_toponym = ','.join(toponym['Point']['pos'].split())
 
-    organization = get_response_organization(ll_toponym, spn_toponym, 'аптека')[0]
-    point = organization["geometry"]["coordinates"]
-    org_point = f"{point[0]},{point[1]}"
+    point_in_map = []
+    points_x = [float(ll_toponym.split(",")[0])]
+    points_y = [float(ll_toponym.split(",")[1])]
+    points= []
 
-    points = [list(map(float, ll_toponym.split(","))), list(map(float, org_point.split(",")))]
-    spn = get_spn(' '.join([str(max(x, y)) for x, y in zip(points[0], points[1])]),
-                  ' '.join([str(min(x, y)) for x, y in zip(points[0], points[1])]))
-    ll = ','.join(
-        [str(float(x) - ((float(x) - float(y)) / 2)) for x, y in zip(ll_toponym.split(','), org_point.split(','))])
+    organizations = get_response_organization(ll_toponym, spn_toponym, str(result), 'аптека')
+    for i in range(result):
+        point = organizations[i - 1]["geometry"]["coordinates"]
+        org_point = f"{point[0]},{point[1]}"
+        points_x.append(point[0])
+        points_y.append(point[1])
+        time = organizations[i-1]['properties']['CompanyMetaData']['Hours']['text'].split()[1]
+        if not time:
+            points.append((org_point, 'pm2grl'))
+        elif 'круглосуточн' in time:
+            points.append((org_point, 'pm2gnl'))
+        else:
+            points.append((org_point, 'pm2bll'))
 
-    print(f'Адрес: {organization["properties"]["CompanyMetaData"]["address"]}\n'
-          f'Названия аптеки: {organization["properties"]["CompanyMetaData"]["name"]}\n'
-          f'Время работы: {organization["properties"]["CompanyMetaData"]["Hours"]["text"]}\n'
-          f'Расстояние до аптеки: {int(lonlat_distance(*points))} метров')
+
+    spn = get_spn(f'{min(points_x)} {min(points_y)}', f'{max(points_x)} {max(points_y)}')
+    ll = ','.join([str(min(points_x) - ((min(points_x) - max(points_x)) / 2)),
+                   str(min(points_y) - ((min(points_y) - max(points_y)) / 2))])
+
 
     map_file = "map.png"
     with open(map_file, "wb") as file:
-        file.write(get_response_map(ll, spn, (ll_toponym, 'vkbkm'), (org_point, 'pm2al')))
+        file.write(get_response_map(ll, spn, (ll_toponym, 'vkbkm'), *points))
     draw_map(map_file)
