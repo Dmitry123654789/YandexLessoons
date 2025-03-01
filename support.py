@@ -22,8 +22,8 @@ def get_response(adress):
 def get_spn(lowerCorner, upperCorner):
     left, button = lowerCorner.split()
     right, top = upperCorner.split()
-    dx = abs(float(right) - float(left)) * 1.2
-    dy = abs(float(top) - float(button)) * 1.2
+    dx = abs(float(right) - float(left))
+    dy = abs(float(top) - float(button))
     return f'{dx},{dy}'
 
 
@@ -35,7 +35,7 @@ def get_response_map(ll, spn, *pt):
         'll': ll,
         'spn': spn,
         'apikey': apikey,
-        'pt': '~'.join([','.join(x) for x in pt])
+        'maptype': 'admin'
     }
     response = requests.get(server_address, params=map_params)
     if not response:
