@@ -22,8 +22,8 @@ def get_response(adress):
 def get_spn(lowerCorner, upperCorner):
     left, button = lowerCorner.split()
     right, top = upperCorner.split()
-    dx = abs(float(right) - float(left))
-    dy = abs(float(top) - float(button))
+    dx = abs(float(right) - float(left)) * 1.2
+    dy = abs(float(top) - float(button)) * 1.2
     return f'{dx},{dy}'
 
 
@@ -63,7 +63,18 @@ def get_response_organization(ll, spn, result, organization):
     return response.json()["features"]
 
 
-
+def draw_map(map_file):
+    pygame.init()
+    screen = pygame.display.set_mode((600, 450))
+    # Рисуем картинку, загружаемую из только что созданного файла.
+    screen.blit(pygame.image.load(map_file), (0, 0))
+    # Переключаем экран и ждем закрытия окна.
+    pygame.display.flip()
+    while pygame.event.wait().type != pygame.QUIT:
+        pass
+    pygame.quit()
+    # Удаляем за собой файл с изображением.
+    os.remove(map_file)
 
 
 # Определяем функцию, считающую расстояние между двумя точками, заданными координатами
