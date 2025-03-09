@@ -1,8 +1,6 @@
 import math
-import os
 import sys
 
-import pygame
 import requests
 
 
@@ -34,47 +32,15 @@ def get_response_map(ll, spn, *pt):
     map_params = {
         'll': ll,
         'spn': spn,
-        'apikey': apikey,
-        'maptype': 'admin'
+        # 'style': 'tags.any:water;road;transit_location;poi;admin|elements:label|stylers.opacity:0',
+        'apikey': apikey
+        # 'pt': '~'.join([','.join(x) for x in pt]),
     }
     response = requests.get(server_address, params=map_params)
     if not response:
         print(f"Ошибка выполнения запроса: {response.url}")
         sys.exit(1)
     return response.content
-
-
-def get_response_organization(ll, spn, result, organization):
-    search_api_server = "https://search-maps.yandex.ru/v1/"
-    api_key = "dda3ddba-c9ea-4ead-9010-f43fbc15c6e3"
-    search_params = {
-        "apikey": api_key,
-        "text": organization,
-        "lang": "ru_RU",
-        "ll": ll,
-        "spn": spn,
-        "type": "biz",
-        'results': result,
-    }
-    response = requests.get(search_api_server, params=search_params)
-    if not response:
-        print(f"Ошибка выполнения запроса: {response.url}")
-        sys.exit(1)
-    return response.json()["features"]
-
-
-def draw_map(map_file):
-    pygame.init()
-    screen = pygame.display.set_mode((600, 450))
-    # Рисуем картинку, загружаемую из только что созданного файла.
-    screen.blit(pygame.image.load(map_file), (0, 0))
-    # Переключаем экран и ждем закрытия окна.
-    pygame.display.flip()
-    while pygame.event.wait().type != pygame.QUIT:
-        pass
-    pygame.quit()
-    # Удаляем за собой файл с изображением.
-    os.remove(map_file)
 
 
 # Определяем функцию, считающую расстояние между двумя точками, заданными координатами

@@ -1,8 +1,12 @@
+import os
 from random import choice
+
+import pygame
 
 from support import *
 
-CITY = ["Краснодар", "Казань", "Нижний Новгород", "Великий Новгород", "Анадырь", "Хабаровск", "Махачкала"]
+CITY = ["Краснодар", "Казань", "Нижний Новгород", "Великий Новгород", "Анадырь", "Хабаровск", "Махачкала", "Москва",
+        "Нью Йорк", "Смоленск"]
 
 
 def save_image(city):
@@ -11,7 +15,7 @@ def save_image(city):
     spn_toponym = ','.join(map(lambda x: str(float(x) / 10),
                                get_spn(toponym['boundedBy']['Envelope']['lowerCorner'],
                                        toponym['boundedBy']['Envelope']['upperCorner']).split(',')))
-    ll_toponym = ','.join(map(lambda x: str(float(x) - 0.005), toponym['Point']['pos'].split()))
+    ll_toponym = ','.join(map(lambda x: str(float(x)), toponym['Point']['pos'].split()))
 
     map_file = "map.png"
     with open(map_file, "wb") as file:
