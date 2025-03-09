@@ -5,8 +5,7 @@ import pygame
 
 from support import *
 
-CITY = ["Краснодар", "Казань", "Нижний Новгород", "Великий Новгород", "Анадырь", "Хабаровск", "Махачкала", "Москва",
-        "Нью Йорк", "Смоленск"]
+CITY = open('country.txt', "r", encoding="utf-8").read().split(', ')  # 1116 городов
 
 
 def save_image(city):
@@ -38,6 +37,7 @@ def draw_pygame_map(map_file):
                 save_image(city)
                 screen.blit(pygame.image.load(map_file), (0, 0))
                 pygame.display.flip()
+                # print(city)
     pygame.quit()
     os.remove(map_file)
 
