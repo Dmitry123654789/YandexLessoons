@@ -32,7 +32,7 @@ def get_response_map(ll, spn, *pt):
     map_params = {
         'll': ll,
         'spn': spn,
-        # 'style': 'tags.any:water;road;transit_location;poi;admin|elements:label|stylers.opacity:0',
+        'style': 'tags.any:water;road;transit_location;poi;admin|elements:label|stylers.opacity:0',
         'apikey': apikey
         # 'pt': '~'.join([','.join(x) for x in pt]),
     }
